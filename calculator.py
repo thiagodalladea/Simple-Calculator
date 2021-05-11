@@ -1,10 +1,12 @@
 from tkinter import *
 
-from numpy import empty, float_
+from numpy import empty, float_, floating
 from numpy.core.arrayprint import FloatingFormat
 
 calc = []
 result = FloatingFormat
+operator = StringVar
+operator = '+'
 
 root = Tk()
 width = root.winfo_screenwidth()
@@ -17,6 +19,7 @@ root.resizable(width=False, height=False)
 
 
 def clear_screen():
+    global operator
     lbl_result.config(text='')
     calc.clear()
 
@@ -24,6 +27,7 @@ def clear_screen():
 
 
 def number_click(button):
+    global result
     if (lbl_result.cget('text')) == None:
         lbl_result.config(text=button)
     elif (lbl_result.cget('text')) == result:
@@ -38,25 +42,54 @@ def number_click(button):
 
 
 def plus_button():
+    global operator
     number = lbl_result.cget('text')
     if number == '':
-        equal_button()
+        operator = '+'
+        return
     else:
+        if operator == '+':
+            calc.append(int(number))
+        elif operator == '-':
+            number = int(number)
+            number = -number
+            calc.append(number)
         lbl_result.config(text='')
-        calc.append(int(number))
-        print(calc)
+    operator = '+'
+
+
+def less_button():
+    global operator
+    number = lbl_result.cget('text')
+    if number == '':
+        operator = '-'
+        return
+    else:
+        if operator == '+':
+            calc.append(int(number))
+        elif operator == '-':
+            number = int(number)
+            number = -number
+            calc.append(number)
+        lbl_result.config(text='')
+    operator = '-'
 
 
 def equal_button():
+    global operator
+    global result
     number = lbl_result.cget('text')
     lbl_result.config(text='')
-    calc.append(int(number))
-    print(calc)
-    global result
-    result = sum(calc)
-    lbl_result.config(text=int(result))
+    if operator == '+':
+        calc.append(int(number))
+    elif operator == '-':
+        number = int(number)
+        number = -number
+        calc.append(number)
+    result = int(sum(calc))
+    lbl_result.config(text=result)
+    operator = '+'
     calc.clear()
-    print(calc)
 
 
 # DEFINE THE RESULT SCREEN
@@ -84,11 +117,13 @@ btn_9 = Button(root, text='9', padx=40, pady=50,
                bg='lightblue', command=lambda: number_click(9))
 btn_0 = Button(root, text='0', padx=88, pady=45,
                bg='lightblue', command=lambda: number_click(0))
+
 btn_clear = Button(root, text='C', padx=134, pady=50,
                    bg='lightyellow', command=clear_screen)
 btn_plus = Button(root, text='+', padx=42, pady=50,
                   bg='lightpink', command=plus_button)
-btn_less = Button(root, text='-', padx=42, pady=50, bg='lightpink')
+btn_less = Button(root, text='-', padx=42, pady=50,
+                  bg='lightpink', command=less_button)
 btn_multiply = Button(root, text='x', padx=42, pady=50, bg='lightpink')
 btn_divide = Button(root, text='/', padx=42, pady=50, bg='lightpink')
 btn_equal = Button(root, text='=', padx=88, pady=45,
