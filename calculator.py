@@ -1,9 +1,10 @@
 from tkinter import *
-import math
 
-from numpy import empty
+from numpy import empty, float_
+from numpy.core.arrayprint import FloatingFormat
 
 calc = []
+result = FloatingFormat
 
 root = Tk()
 width = root.winfo_screenwidth()
@@ -25,7 +26,7 @@ def clear_screen():
 def number_click(button):
     if (lbl_result.cget('text')) == None:
         lbl_result.config(text=button)
-    elif len(calc) == 0:
+    elif (lbl_result.cget('text')) == result:
         lbl_result.config(text='')
         lbl_result.config(text=button)
     else:
@@ -51,8 +52,9 @@ def equal_button():
     lbl_result.config(text='')
     calc.append(int(number))
     print(calc)
+    global result
     result = sum(calc)
-    lbl_result.config(text=result)
+    lbl_result.config(text=int(result))
     calc.clear()
     print(calc)
 
