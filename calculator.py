@@ -1,7 +1,8 @@
-from tkinter import *
-
 from numpy import empty, float_, floating
 from numpy.core.arrayprint import FloatingFormat
+from tkinter import *
+from tkinter import messagebox
+
 
 calc = []
 result = FloatingFormat
@@ -49,9 +50,9 @@ def plus_button():
         return
     else:
         if operator == '+':
-            calc.append(int(number))
+            calc.append(float(number))
         elif operator == '-':
-            number = int(number)
+            number = float(number)
             number = -number
             calc.append(number)
         lbl_result.config(text='')
@@ -66,9 +67,9 @@ def less_button():
         return
     else:
         if operator == '+':
-            calc.append(int(number))
+            calc.append(float(number))
         elif operator == '-':
-            number = int(number)
+            number = float(number)
             number = -number
             calc.append(number)
         lbl_result.config(text='')
@@ -81,15 +82,24 @@ def equal_button():
     number = lbl_result.cget('text')
     lbl_result.config(text='')
     if operator == '+':
-        calc.append(int(number))
+        calc.append(float(number))
     elif operator == '-':
-        number = int(number)
+        number = float(number)
         number = -number
         calc.append(number)
-    result = int(sum(calc))
-    lbl_result.config(text=result)
+    result = float(sum(calc))
+    if (result % 2) != 0 and (result % 1) != 0:
+        lbl_result.config(text='%.3f' % (result))
+    else:
+        lbl_result.config(text='%.0f' % (result))
     operator = '+'
+    print(calc)
     calc.clear()
+
+
+# AVISO INICIAL
+messagebox.showwarning(
+    title='Warning', message='It is advisable to click on the clear button (c) after making an operation')
 
 
 # DEFINE THE RESULT SCREEN
@@ -117,6 +127,8 @@ btn_9 = Button(root, text='9', padx=40, pady=50,
                bg='lightblue', command=lambda: number_click(9))
 btn_0 = Button(root, text='0', padx=88, pady=45,
                bg='lightblue', command=lambda: number_click(0))
+btn_dot = Button(root, text=',', padx=41, pady=45,
+                 bg='lightblue', command=lambda: number_click('.'))
 
 btn_clear = Button(root, text='C', padx=134, pady=50,
                    bg='lightyellow', command=clear_screen)
@@ -126,7 +138,7 @@ btn_less = Button(root, text='-', padx=42, pady=50,
                   bg='lightpink', command=less_button)
 btn_multiply = Button(root, text='x', padx=42, pady=50, bg='lightpink')
 btn_divide = Button(root, text='/', padx=42, pady=50, bg='lightpink')
-btn_equal = Button(root, text='=', padx=88, pady=45,
+btn_equal = Button(root, text='=', padx=42, pady=45,
                    bg='lightpink', command=equal_button)
 
 # PUT THE BUTTONS ON SCREEN
@@ -140,12 +152,13 @@ btn_6.grid(row=3, column=3)
 btn_7.grid(row=2, column=1)
 btn_8.grid(row=2, column=2)
 btn_9.grid(row=2, column=3)
+btn_dot.grid(row=5, column=3)
 btn_clear.grid(row=1, column=1, columnspan=3)
 btn_plus.grid(row=1, column=4)
 btn_less.grid(row=2, column=4)
 btn_multiply.grid(row=3, column=4)
 btn_divide.grid(row=4, column=4)
-btn_equal.grid(row=5, column=3, columnspan=2)
+btn_equal.grid(row=5, column=4)
 
 
 root.mainloop()
