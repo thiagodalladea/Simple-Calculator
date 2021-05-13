@@ -3,11 +3,8 @@ from numpy.core.arrayprint import FloatingFormat
 from tkinter import *
 from tkinter import messagebox
 
-
-calc = []
-result = FloatingFormat
-operator = StringVar
-operator = '+'
+# Variável global da variável resultado de alguma operação
+result = float
 
 root = Tk()
 width = root.winfo_screenwidth()
@@ -20,9 +17,9 @@ root.resizable(width=False, height=False)
 
 
 def clear_screen():
-    global operator
+    global result
     lbl_result.config(text='')
-    calc.clear()
+    result = None
 
 # COMPUTE THE VALUE OF THE CLICKED BUTTON
 
@@ -39,67 +36,48 @@ def number_click(button):
         lbl_result.config(text=current_text + str(button))
 
 
-# PLUS CALCULATION FUNCTION
+# CALC FUNCTIONS
 
 
 def plus_button():
-    global operator
-    number = lbl_result.cget('text')
-    if number == '':
-        operator = '+'
-        return
+    if (lbl_result.cget('text')) == None:
+        lbl_result.config(text='+')
     else:
-        if operator == '+':
-            calc.append(float(number))
-        elif operator == '-':
-            number = float(number)
-            number = -number
-            calc.append(number)
-        lbl_result.config(text='')
-    operator = '+'
+        current_text = str(lbl_result.cget('text'))
+        lbl_result.config(text=current_text + '+')
 
 
 def less_button():
-    global operator
-    number = lbl_result.cget('text')
-    if number == '':
-        operator = '-'
-        return
+    if (lbl_result.cget('text')) == None:
+        lbl_result.config(text='-')
     else:
-        if operator == '+':
-            calc.append(float(number))
-        elif operator == '-':
-            number = float(number)
-            number = -number
-            calc.append(number)
-        lbl_result.config(text='')
-    operator = '-'
+        current_text = str(lbl_result.cget('text'))
+        lbl_result.config(text=current_text + '-')
+
+
+def multiply_button():
+    if (lbl_result.cget('text')) == None:
+        lbl_result.config(text='*')
+    else:
+        current_text = str(lbl_result.cget('text'))
+        lbl_result.config(text=current_text + '*')
+
+
+def divide_button():
+    if (lbl_result.cget('text')) == None:
+        lbl_result.config(text='/')
+    else:
+        current_text = str(lbl_result.cget('text'))
+        lbl_result.config(text=current_text + '/')
 
 
 def equal_button():
-    global operator
     global result
-    number = lbl_result.cget('text')
+    result = str(lbl_result.cget('text'))
     lbl_result.config(text='')
-    if operator == '+':
-        calc.append(float(number))
-    elif operator == '-':
-        number = float(number)
-        number = -number
-        calc.append(number)
-    result = float(sum(calc))
-    if (result % 2) != 0 and (result % 1) != 0:
-        lbl_result.config(text='%.3f' % (result))
-    else:
-        lbl_result.config(text='%.0f' % (result))
-    operator = '+'
-    print(calc)
-    calc.clear()
-
-
-# AVISO INICIAL
-messagebox.showwarning(
-    title='Warning', message='It is advisable to click on the clear button (c) after making an operation')
+    # Função eval tranforma a string em uma equação matemática!!
+    result = eval(result)
+    lbl_result.config(text=result)
 
 
 # DEFINE THE RESULT SCREEN
@@ -136,8 +114,10 @@ btn_plus = Button(root, text='+', padx=42, pady=50,
                   bg='lightpink', command=plus_button)
 btn_less = Button(root, text='-', padx=42, pady=50,
                   bg='lightpink', command=less_button)
-btn_multiply = Button(root, text='x', padx=42, pady=50, bg='lightpink')
-btn_divide = Button(root, text='/', padx=42, pady=50, bg='lightpink')
+btn_multiply = Button(root, text='x', padx=42, pady=50,
+                      bg='lightpink', command=multiply_button)
+btn_divide = Button(root, text='/', padx=42, pady=50,
+                    bg='lightpink', command=divide_button)
 btn_equal = Button(root, text='=', padx=42, pady=45,
                    bg='lightpink', command=equal_button)
 
